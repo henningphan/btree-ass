@@ -1,2 +1,19 @@
-
 // your btree implementation goes here
+#include "btree.h"
+template<typename T>
+btree<T>::btree(size_t maxNodeElems): _maxNodeElems(maxNodeElems){ }
+
+template<typename T>
+btree<T>::btree(const btree<T>& original){}
+
+template<typename T>
+btree<T>::btree( btree<T>&& original){}
+
+template<typename T>
+btree<T>& btree<T>::operator=(const btree<T>& rhs){}
+
+template<typename T>
+btree<T>& btree<T>::operator=(btree<T>&& rhs){}
+
+template<typename T>
+std::ostream& operator<< (std::ostream& os, const btree<T>& tree){return os;}

@@ -13,6 +13,7 @@
 #include <iostream>
 #include <cstddef>
 #include <utility>
+#include <map>
 
 // we better include the iterator
 #include "btree_iterator.h"
@@ -23,6 +24,8 @@
 template <typename T> 
 class btree {
  public:
+ typedef btree_iterator<T> iterator;
+ typedef btree_iterator<T> const_iterator;
   /** Hmm, need some iterator typedefs here... friends? **/
  
   /**
@@ -172,6 +175,10 @@ class btree {
   
 private:
   // The details of your implementation go here
+  T value;
+  const size_t _maxNodeElems;
+  map< T,btree<T>* > _list;
+
 };
 
 
