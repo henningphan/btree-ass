@@ -27,8 +27,10 @@ std::ostream& operator<<(std::ostream& os, const btree<T>& tree);
 template <typename T> 
 class btree {
  public:
+ friend class btree_iterator<T>;
+ friend class const_btree_iterator<T>;
  typedef btree_iterator<T> iterator;
- typedef btree_iterator<T> const_iterator;
+ typedef const_btree_iterator<T> const_iterator;
   /** Hmm, need some iterator typedefs here... friends? **/
  
   /**
