@@ -20,6 +20,9 @@
 
 // we do this to avoid compiler errors about non-template friends
 // what do we do, remember? :)
+template <class> class btree;
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const btree<T>& tree);
 
 template <typename T> 
 class btree {
@@ -108,6 +111,8 @@ class btree {
    * -- crbegin() 
    * -- crend() 
    */
+   iterator begin(){ return iterator(nullptr);}
+   iterator end(){ return iterator(nullptr);}
   
   /**
     * Returns an iterator to the matching element, or whatever 
@@ -176,7 +181,7 @@ class btree {
 private:
   // The details of your implementation go here
   T value;
-  const size_t _maxNodeElems;
+  size_t _maxNodeElems;
   map< T,btree<T>* > _list;
 
 };

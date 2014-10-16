@@ -1,5 +1,6 @@
 // your btree implementation goes here
 #include "btree.h"
+#include "btree_iterator.h"
 template<typename T>
 btree<T>::btree(size_t maxNodeElems): _maxNodeElems(maxNodeElems){ }
 
@@ -17,3 +18,11 @@ btree<T>& btree<T>::operator=(btree<T>&& rhs){}
 
 template<typename T>
 std::ostream& operator<< (std::ostream& os, const btree<T>& tree){return os;}
+
+template<typename T>
+btree_iterator<T> btree<T>::find( const T& elem){
+  return btree_iterator<T>();
+}
+template<typename T>
+btree<T>::~btree(){
+}

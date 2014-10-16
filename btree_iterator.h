@@ -25,8 +25,6 @@ class btree_iterator{
   btree<T>* _pointee;
   T holder;
 
-
-
 };
 
 /**
