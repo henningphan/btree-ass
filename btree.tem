@@ -46,7 +46,10 @@ btree<T>& btree<T>::operator=(const btree<T>& rhs){
 
 
 template<typename T>
-btree<T>& btree<T>::operator=(btree<T>&& rhs){}
+btree<T>& btree<T>::operator=(btree<T>&& rhs){
+  steal(*this,rhs);
+  return *this;
+}
 
 template<typename T>
 std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
