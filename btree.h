@@ -183,9 +183,13 @@ class btree {
   ~btree();
   
 private:
+  // TODO implement isFull here?
+  bool isFull();
+
   // The details of your implementation go here
   size_t _maxNodeElems;
-  map< T,btree<T>* > _list;
+  map< T,btree<T>* > _map;
+  btree<T>* _parent;
 
 };
 

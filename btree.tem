@@ -1,11 +1,18 @@
 // your btree implementation goes here
 #include "btree.h"
 #include "btree_iterator.h"
-template<typename T>
-btree<T>::btree(size_t maxNodeElems): _maxNodeElems(maxNodeElems){ }
+#include <iostream>
+#include <iterator>
+#include <deque>
+using namespace std;
 
 template<typename T>
-btree<T>::btree(const btree<T>& original){}
+btree<T>::btree(size_t maxNodeElems): _maxNodeElems(maxNodeElems), _parent(nullptr){ }
+
+template<typename T>
+btree<T>::btree(const btree<T>& original){
+
+}
 
 template<typename T>
 btree<T>::btree( btree<T>&& original){}
@@ -17,7 +24,22 @@ template<typename T>
 btree<T>& btree<T>::operator=(btree<T>&& rhs){}
 
 template<typename T>
-std::ostream& operator<< (std::ostream& os, const btree<T>& tree){return os;}
+std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
+  deque<pair<T, btree<T>*>> queue;
+
+  copy(tree._map.begin(), tree._map.end(),back_inserter(queue));
+  cout << "size queue " << queue.size() << endl;
+  cout << "size tree " << tree._map.size() << endl;
+
+  while( queue.size() >0 ){
+    pair<T, btree<T>*> tuple = queue[0];
+    queue.pop_front();
+    copy(tuple.second->_map.begin(), tuple.second->_map.end(),back_inserter(queue));
+    cout << "elem " << tuple.first << endl;
+  }
+  cout << "tree" << endl;
+  return os;
+}
 
 template<typename T>
 btree_iterator<T> btree<T>::find( const T& elem){
@@ -29,6 +51,32 @@ const_btree_iterator<T> btree<T>::find( const T& elem)const{
 }
 template<typename T>
 std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
+  btree<T>* treeCur = this;
+  while( treeCur->isFull() ){
+    auto it_map = treeCur->_map.lower_bound(elem);
+    // if tree is full and elem exist -> return false
+    if( it_map->first == elem){
+      // TODO return proper iterator
+      return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(), false);
+      // If tree is full and elem is larger than all elem in _map -> get last tree in map
+    }else if( it_map == treeCur->_map.end()){
+      --it_map;
+      treeCur = it_map->second;
+      // if tree is full and elem doesnt exist -> get next tree
+    }else{
+      treeCur = it_map->second;
+    }
+  }
+  auto it_map = treeCur->_map.lower_bound(elem);
+  // if tree is not full and elem exist -> return false
+  if( it_map-> first == elem ){
+    // TODO return proper iterator
+    return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(), false);
+  }
+  // if tree is not full and elem doesnt exist -> insert tree
+  btree<T>* treeTemp = new btree<T>();
+  treeTemp->_parent = treeCur;
+  treeCur->_map.emplace(elem,treeTemp);
   return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(), true);
 }
 template<typename T>
@@ -37,4 +85,9 @@ std::pair<const_btree_iterator<T>, bool> btree<T>::insert(const T& elem)const{
 }
 template<typename T>
 btree<T>::~btree(){
+}
+// private functions
+template<typename T>
+bool btree<T>::isFull(){
+  return _map.size() >= _maxNodeElems;
 }
