@@ -15,6 +15,8 @@ btree<T>::btree(const btree<T>& original){
   this->_map.clear();
   this->_parent = nullptr;
 
+  // breadth first search insertion
+  // if the btree is in a valid state it should create a valid copy
   this->_maxNodeElems = original._maxNodeElems;
   deque<pair<T, btree<T>*>> queue;
   copy( original._map.begin(), original._map.end(), back_inserter(queue));
@@ -27,6 +29,7 @@ btree<T>::btree(const btree<T>& original){
 
 }
 
+// move ctor
 template<typename T>
 btree<T>::btree( btree<T>&& original){
   this->_maxNodeElems = original._maxNodeElems;
@@ -35,7 +38,12 @@ btree<T>::btree( btree<T>&& original){
 }
 
 template<typename T>
-btree<T>& btree<T>::operator=(const btree<T>& rhs){}
+btree<T>& btree<T>::operator=(const btree<T>& rhs){
+  btree<T> treeTemp(rhs);
+  steal(*this, treeTemp);
+  return *this;
+}
+
 
 template<typename T>
 btree<T>& btree<T>::operator=(btree<T>&& rhs){}
@@ -107,4 +115,9 @@ btree<T>::~btree(){
 template<typename T>
 bool btree<T>::isFull(){
   return _map.size() >= _maxNodeElems;
+}
+template<typename T>
+void btree<T>::steal(btree<T>& lhs, btree<T>& rhs){
+  lhs._maxNodeElems = rhs._maxNodeElems;
+  lhs._map = move(rhs._map);
 }

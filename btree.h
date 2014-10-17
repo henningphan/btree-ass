@@ -183,8 +183,10 @@ class btree {
   ~btree();
   
 private:
-  // TODO implement isFull here?
-  bool isFull();
+  // TODO implement isFull here throws error
+  bool isFull();//{ return _map.size() >=_maxNodeElems;}
+  bool isEmpty(){ return false;}
+  void steal(btree<T>& lhs, btree<T>& rhs);
 
   // The details of your implementation go here
   size_t _maxNodeElems;
