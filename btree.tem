@@ -24,5 +24,17 @@ btree_iterator<T> btree<T>::find( const T& elem){
   return btree_iterator<T>();
 }
 template<typename T>
+const_btree_iterator<T> btree<T>::find( const T& elem)const{
+  return const_btree_iterator<T>();
+}
+template<typename T>
+std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
+  return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(), true);
+}
+template<typename T>
+std::pair<const_btree_iterator<T>, bool> btree<T>::insert(const T& elem)const{
+  return make_pair< const_btree_iterator<T>,bool>(const_btree_iterator<T>(), true);
+}
+template<typename T>
 btree<T>::~btree(){
 }

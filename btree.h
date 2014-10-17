@@ -115,6 +115,7 @@ class btree {
    */
    iterator begin(){ return iterator(nullptr);}
    iterator end(){ return iterator(nullptr);}
+   const_iterator end() const{ return const_iterator(nullptr);}
   
   /**
     * Returns an iterator to the matching element, or whatever 
@@ -171,6 +172,7 @@ class btree {
     *         because no matching element was there prior to the insert call.
     */
   std::pair<iterator, bool> insert(const T& elem);
+  std::pair<const_iterator, bool> insert(const T& elem)const;
 
   /**
     * Disposes of all internal resources, which includes
@@ -182,7 +184,6 @@ class btree {
   
 private:
   // The details of your implementation go here
-  T value;
   size_t _maxNodeElems;
   map< T,btree<T>* > _list;
 

@@ -27,6 +27,26 @@ class btree_iterator{
 
 };
 
+template <typename T>
+class const_btree_iterator{
+  public:
+  typedef ptrdiff_t difference_type;
+  typedef bidirectional_iterator_tag iterator_category;
+  typedef T value_type;
+  typedef const T* pointer;
+  typedef const T& reference;
+  reference operator*() const;
+  pointer operator->() const;
+  const_btree_iterator& operator++();
+  bool operator==(const const_btree_iterator& other);
+  bool operator!=(const const_btree_iterator& other);
+  const_btree_iterator( btree<T>* pointee=nullptr);
+  private:
+  // TODO is typename required here?
+  btree<T>* _pointee;
+  T holder;
+
+};
 /**
  * You MUST implement the btree iterators as (an) external class(es) in this file.
  * Failure to do so will result in a total mark of 0 for this deliverable.
