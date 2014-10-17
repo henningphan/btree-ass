@@ -185,7 +185,7 @@ class btree {
 private:
   // TODO implement isFull here throws error
   bool isFull();//{ return _map.size() >=_maxNodeElems;}
-  bool isEmpty(){ return false;}
+  bool isEmpty(){ return _map.empty();}
   void steal(btree<T>& lhs, btree<T>& rhs);
 
   // The details of your implementation go here
