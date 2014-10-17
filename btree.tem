@@ -11,6 +11,10 @@ btree<T>::btree(size_t maxNodeElems): _maxNodeElems(maxNodeElems), _parent(nullp
 
 template<typename T>
 btree<T>::btree(const btree<T>& original){
+  // clear out the old stuff
+  this->_map.clear();
+  this->_parent = nullptr;
+
   this->_maxNodeElems = original._maxNodeElems;
   deque<pair<T, btree<T>*>> queue;
   copy( original._map.begin(), original._map.end(), back_inserter(queue));
@@ -24,7 +28,11 @@ btree<T>::btree(const btree<T>& original){
 }
 
 template<typename T>
-btree<T>::btree( btree<T>&& original){}
+btree<T>::btree( btree<T>&& original){
+  this->_maxNodeElems = original._maxNodeElems;
+  this->_map = move(original._map);
+
+}
 
 template<typename T>
 btree<T>& btree<T>::operator=(const btree<T>& rhs){}
