@@ -11,6 +11,15 @@ btree<T>::btree(size_t maxNodeElems): _maxNodeElems(maxNodeElems), _parent(nullp
 
 template<typename T>
 btree<T>::btree(const btree<T>& original){
+  this->_maxNodeElems = original._maxNodeElems;
+  deque<pair<T, btree<T>*>> queue;
+  copy( original._map.begin(), original._map.end(), back_inserter(queue));
+  while( queue.size() > 0){
+    pair<T, btree<T>*> tuple = queue[0];
+    queue.pop_front();
+    copy(tuple.second->_map.begin(), tuple.second->_map.end(), back_inserter(queue));
+    this-> insert( tuple.first);
+  }
 
 }
 
