@@ -75,7 +75,7 @@ btree_iterator<T> btree<T>::find( const T& elem){
   while( !treeCur->isEmpty() ){
     auto it = treeCur->_map.lower_bound(elem);
     if( it->first == elem){
-      return btree_iterator<T> (treeCur, getPrevious(treeCur, elem));
+      return btree_iterator<T> (treeCur, &(it->first));
     }
     // special case here, _map end falls inte last pairs jurisdiction
     if( it == treeCur->_map.end() ){
