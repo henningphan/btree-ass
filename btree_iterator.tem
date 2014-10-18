@@ -10,6 +10,7 @@ T* btree_iterator<T>::operator->() const{
 }
 template <typename T>
 btree_iterator<T>& btree_iterator<T>::operator++() {
+  auto it = _pTree->_map.upper_bound( *_value);
   return this;
 }
 template <typename T>
@@ -23,6 +24,12 @@ bool btree_iterator<T>::operator!=(const btree_iterator<T>& other){
 template <typename T>
 btree_iterator<T>::btree_iterator( btree<T>* pTree, const T* value): _pTree(pTree), _value(value){
 }
+
+/**
+  *
+  * const iterator
+  *
+  */
 
 template <typename T>
 const T& const_btree_iterator<T>::operator*() const{

@@ -194,6 +194,7 @@ private:
   size_t _maxNodeElems;
   map< T,pair<T,btree<T>*> > _map;
   btree<T>* _parent;
+  btree<T>* _last;
 
 };
 
