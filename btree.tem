@@ -71,7 +71,22 @@ std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
 
 template<typename T>
 btree_iterator<T> btree<T>::find( const T& elem){
-  return btree_iterator<T>();
+  btree<T>* treeCur = this;
+  while( !treeCur->isEmpty() ){
+    auto it = treeCur->_map.lower_bound(elem);
+    if( it->first == elem){
+      return btree_iterator<T> (treeCur, getPrevious(treeCur, elem));
+    }
+    // special case here, _map end falls inte last pairs jurisdiction
+    if( it == treeCur->_map.end() ){
+      // TODO precedence gamble here expected (--it)->second;
+      treeCur = --it->second;
+    }else{
+      treeCur = it->second;
+    }
+  }
+  // didnt find the element -> return iterator(nullptr)
+  return btree_iterator<T>(nullptr, nullptr);
 }
 template<typename T>
 const_btree_iterator<T> btree<T>::find( const T& elem)const{
@@ -123,4 +138,15 @@ template<typename T>
 void btree<T>::steal(btree<T>& lhs, btree<T>& rhs){
   lhs._maxNodeElems = rhs._maxNodeElems;
   lhs._map = move(rhs._map);
+}
+template<typename T>
+btree<T>* btree<T>::getPrevious( btree<T>* tree, const T& elem){
+  auto it = tree->_map.lower_bound( elem );
+  if( it == tree->_map.begin() ){
+    return tree->_parent;
+  }else{
+    --it;
+    return it->second;
+  }
+
 }

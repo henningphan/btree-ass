@@ -21,7 +21,7 @@ bool btree_iterator<T>::operator!=(const btree_iterator<T>& other){
   return true;
 }
 template <typename T>
-btree_iterator<T>::btree_iterator( btree<T>* pointee): _pointee(pointee){
+btree_iterator<T>::btree_iterator( btree<T>* pCur, btree<T>* pPrev): _pCur(pCur), _pPrev(pPrev){
 }
 
 template <typename T>

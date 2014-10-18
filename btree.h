@@ -187,6 +187,8 @@ private:
   bool isFull();//{ return _map.size() >=_maxNodeElems;}
   bool isEmpty(){ return _map.empty();}
   void steal(btree<T>& lhs, btree<T>& rhs);
+  // TODO should it be static?
+  btree<T>* getPrevious( btree<T>*, const T& elem);
 
   // The details of your implementation go here
   size_t _maxNodeElems;
