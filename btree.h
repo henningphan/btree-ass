@@ -192,7 +192,7 @@ private:
 
   // The details of your implementation go here
   size_t _maxNodeElems;
-  map< T,btree<T>* > _map;
+  map< T,pair<T,btree<T>*> > _map;
   btree<T>* _parent;
 
 };
