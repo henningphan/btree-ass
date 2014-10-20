@@ -13,7 +13,7 @@
 #include <iostream>
 #include <cstddef>
 #include <utility>
-#include <map>
+#include <vector>
 
 // we better include the iterator
 #include "btree_iterator.h"
@@ -183,19 +183,18 @@ class btree {
   ~btree();
   
 private:
-  // TODO implement isFull here throws error
-  bool isFull();//{ return _map.size() >=_maxNodeElems;}
-  bool isEmpty(){ return _map.empty();}
+  btree(size_t maxNodeElems, btree<T>* parent);
+  bool isFull(){ return _vec.size() >=_maxNodeElems;}
+  bool isEmpty(){ return _vec.empty();}
   void steal(btree<T>& lhs, btree<T>& rhs);
   // TODO should it be static?
   btree<T>* getPrevious( btree<T>*, const T& elem);
 
   // The details of your implementation go here
   size_t _maxNodeElems;
-  map< T,pair<T,btree<T>*> > _map;
+  vector< pair<T,btree<T>*> > _vec;
   btree<T>* _parent;
   btree<T>* _last;
-
 };
 
 

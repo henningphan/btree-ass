@@ -22,6 +22,9 @@
 *.a
 *.lib
 
+# vim swap files
+*.swp
+
 # Executables
 *.exe
 *.out
