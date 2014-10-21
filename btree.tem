@@ -159,6 +159,14 @@ std::pair<const_btree_iterator<T>, bool> btree<T>::insert(const T& elem)const{
 }
 template<typename T>
 btree<T>::~btree(){
+  if( _last != nullptr){
+    delete _last;
+  }
+  for( auto& p: _vec){
+    delete p.second;
+    p.second = nullptr;
+  }
+  _parent = nullptr;
 }
 // private functions
 template<typename T>
