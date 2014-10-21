@@ -175,9 +175,6 @@ btree<T>::~btree(){
   _parent = nullptr;
 }
 // private functions
-template<typename T>
-btree<T>* btree<T>::getPrevious( btree<T>* tree, const T& elem){
-}
 
 template<typename T>
 void btree<T>::swap( btree<T>& lhs, btree<T>& rhs){
