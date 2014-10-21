@@ -52,21 +52,16 @@ btree<T>::btree( btree<T>&& original){
 
 template<typename T>
 btree<T>& btree<T>::operator=(const btree<T>& rhs){
-  // TODO destroy elements in this->_vec properly
-  this->_vec = move(rhs._vec);
-  this->_last = rhs._last;
-
   btree<T> temp(rhs);
-  // TODO guarantee this uses btree:swap
   swap( *this, temp);
-  
   return *this;
 }
 
 template<typename T>
 btree<T>& btree<T>::operator=(btree<T>&& rhs){
   swap(*this,rhs);
-  // TODO cleanup rhs
+  btree<T> temp(rhs._maxNodeElems);
+  swap(temp,rhs);
   return *this;
 }
 
