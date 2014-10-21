@@ -12,12 +12,29 @@ template<typename T>
 btree<T>::btree(size_t maxNodeElems, btree<T>* parent): _maxNodeElems(maxNodeElems), _parent(parent),
 _last(nullptr) { }
 
+// copy ctor
+// Only pass the root btree as argument
 template<typename T>
 btree<T>::btree(const btree<T>& original){
-  // clear out the old stuff
-  this->_vec.clear();
-  this->_parent = nullptr;
-  this->_last = nullptr;
+  this->_maxNodeElems = original._maxNodeElems;
+  deque<const btree<T> *> q;
+  q.push_back(&original);
+  while( !q.empty() ){
+    const btree<T> *t = q[0];
+    q.pop_front();
+    for( auto p: t->_vec){
+      if( ! p.second->isEmpty() ){
+        q.push_back( p.second );
+      }
+    }
+    if( t-> _last != nullptr){
+      q.push_back( t->_last );
+    }
+    for( auto p: t->_vec){
+      this->insert(p.first);
+    }
+  }
+
 }
 
 // move ctor
@@ -51,6 +68,8 @@ std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
 
     const btree<T> *t = q[0];
     q.pop_front();
+    if( t == nullptr){
+    }
 
     //copy over next depth
     for(auto p: t->_vec){
