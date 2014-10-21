@@ -14,11 +14,16 @@ btree_iterator<T>& btree_iterator<T>::operator++() {
 }
 template <typename T>
 bool btree_iterator<T>::operator==(const btree_iterator<T>& other){
-  return true;
+  if( this->_pTree == nullptr && other._pTree == nullptr){
+    return true;
+  }else if( this->_pTree == other._pTree && this->_index == other._index){
+    return true;
+  }
+  return false;
 }
 template <typename T>
 bool btree_iterator<T>::operator!=(const btree_iterator<T>& other){
-  return true;
+  return !this==(other);
 }
 template <typename T>
 btree_iterator<T>::btree_iterator( btree<T>* pTree, size_t index): _pTree(pTree), _index(index){
