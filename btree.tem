@@ -21,8 +21,15 @@ btree<T>::btree(const btree<T>& original){
 }
 
 // move ctor
+// Only pass the root btree as argument
 template<typename T>
 btree<T>::btree( btree<T>&& original){
+  this->_maxNodeElems = original._maxNodeElems;
+  this->_vec = move(original._vec);
+  this->_last = original._last;
+
+  original._last = nullptr;
+
 }
 
 template<typename T>
