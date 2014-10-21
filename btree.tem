@@ -113,7 +113,7 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
       // element already exists
       if( elem == _vec[i].first){
         // TODO return proper iterator
-        return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(), false);
+        return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
       }
       // element is in another btree
       if( elem < _vec[i].first  ){
@@ -128,7 +128,7 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
       // element already exists
       if( _vec[i].first == elem ){
         // TODO return proper iterator
-        return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(), false);
+        return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
         // element should be inserted here
       }else if( elem < _vec[i].first  ){
         _vec.insert(_vec.begin()+i, make_pair(elem, new btree<T>(_maxNodeElems, this)));
@@ -136,7 +136,7 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
         if( _vec.size() >= _maxNodeElems )
           _last = new btree(_maxNodeElems, this);
         // TODO return proper iterator
-        return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(), false);
+        return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
       }
     }
     // found no place to insert thus it must be at the end
@@ -145,7 +145,7 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
     if( _vec.size() >= _maxNodeElems ){
       _last = new btree(_maxNodeElems);
     }
-    return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(), true);
+    return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,_vec.size()-1), true);
   }
 }
 template<typename T>

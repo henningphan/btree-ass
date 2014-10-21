@@ -19,12 +19,11 @@ class btree_iterator{
   btree_iterator& operator++();
   bool operator==(const btree_iterator& other);
   bool operator!=(const btree_iterator& other);
-  btree_iterator( btree<T>* pCur=nullptr, const T* value=nullptr);
-//  btree_iterator( btree<T>* pCur, btree<T>* pPrev);
+  btree_iterator( btree<T>* pTree, size_t index);
   private:
   // TODO is typename required here?
   btree<T>* _pTree;
-  const T* _value;
+  size_t _index;
 
 };
 
