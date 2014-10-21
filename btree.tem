@@ -100,7 +100,19 @@ std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
 
 template<typename T>
 btree_iterator<T> btree<T>::find( const T& elem){
-  return btree_iterator<T>(nullptr, nullptr);
+  for(size_t i=0; i< this->_vec.size(); ++i){
+    if( elem < this->_vec[i].first && this->_vec[i].second->isEmpty()){
+      return btree_iterator<T>(nullptr,0);
+    } else if( elem < this->_vec[i].first ){
+      return this->_vec[i].second->find(elem);
+    }else if( elem == this->_vec[i].first ){
+      return btree_iterator<T>(this,i);
+    }
+  }
+  if( this->_last == nullptr ){
+    return btree_iterator<T>(nullptr,0);
+  }
+  return this->find(elem);
 }
 template<typename T>
 const_btree_iterator<T> btree<T>::find( const T& elem)const{
@@ -119,7 +131,6 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
       if( elem < _vec[i].first  ){
         return _vec[i].second->insert(elem);
       }
-
     }
     // element is larger send it to the larger branch
     return _last->insert(elem);
