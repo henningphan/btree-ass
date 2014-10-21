@@ -52,18 +52,21 @@ btree<T>::btree( btree<T>&& original){
 
 template<typename T>
 btree<T>& btree<T>::operator=(const btree<T>& rhs){
-  this->_maxNodeElems = rhs._maxNodeElems;
   // TODO destroy elements in this->_vec properly
   this->_vec = move(rhs._vec);
   this->_last = rhs._last;
+
+  btree<T> temp(rhs);
+  // TODO guarantee this uses btree:swap
+  swap( *this, temp);
   
-  // cleanup
-  rhs._last = nullptr;
   return *this;
 }
 
 template<typename T>
 btree<T>& btree<T>::operator=(btree<T>&& rhs){
+  swap(*this,rhs);
+  // TODO cleanup rhs
   return *this;
 }
 
@@ -158,10 +161,6 @@ template<typename T>
 btree<T>::~btree(){
 }
 // private functions
-template<typename T>
-void btree<T>::swap(btree<T>& lhs, btree<T>& rhs){
-  
-}
 template<typename T>
 btree<T>* btree<T>::getPrevious( btree<T>* tree, const T& elem){
 }

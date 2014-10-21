@@ -186,7 +186,7 @@ private:
   btree(size_t maxNodeElems, btree<T>* parent);
   bool isFull(){ return _vec.size() >=_maxNodeElems;}
   bool isEmpty(){ return _vec.empty();}
-  void steal(btree<T>& lhs, btree<T>& rhs);
+  void swap(btree<T>& lhs, btree<T>& rhs);
   // TODO should it be static?
   btree<T>* getPrevious( btree<T>*, const T& elem);
 
