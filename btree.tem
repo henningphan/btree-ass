@@ -14,6 +14,7 @@ _last(nullptr) { }
 
 // copy ctor
 // Only pass the root btree as argument
+// only guarantee to work correctly if original is correct
 template<typename T>
 btree<T>::btree(const btree<T>& original){
   this->_maxNodeElems = original._maxNodeElems;
@@ -51,9 +52,15 @@ btree<T>::btree( btree<T>&& original){
 
 template<typename T>
 btree<T>& btree<T>::operator=(const btree<T>& rhs){
+  this->_maxNodeElems = rhs._maxNodeElems;
+  // TODO destroy elements in this->_vec properly
+  this->_vec = move(rhs._vec);
+  this->_last = rhs._last;
+  
+  // cleanup
+  rhs._last = nullptr;
   return *this;
 }
-
 
 template<typename T>
 btree<T>& btree<T>::operator=(btree<T>&& rhs){
@@ -152,8 +159,17 @@ btree<T>::~btree(){
 }
 // private functions
 template<typename T>
-void btree<T>::steal(btree<T>& lhs, btree<T>& rhs){
+void btree<T>::swap(btree<T>& lhs, btree<T>& rhs){
+  
 }
 template<typename T>
 btree<T>* btree<T>::getPrevious( btree<T>* tree, const T& elem){
+}
+
+template<typename T>
+void btree<T>::swap( btree<T>& lhs, btree<T>& rhs){
+  swap(lhs._maxNodeElems , rhs._maxNodeElems);
+  lhs._vec = move(rhs._vec);
+  swap(lhs._last , rhs._last);
+
 }
