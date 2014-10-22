@@ -18,10 +18,11 @@ class btree_iterator{
   pointer operator->() const;
   btree_iterator& operator++();
   bool operator==(const btree_iterator& other);
-  bool operator!=(const btree_iterator& other);
   btree_iterator( btree<T>* pTree, size_t index);
+  bool operator!=(const btree_iterator& other);
+
   private:
-  // TODO is typename required here?
+  bool goLeft();
   btree<T>* _pTree;
   size_t _index;
 
@@ -43,7 +44,7 @@ class const_btree_iterator{
   const_btree_iterator( btree<T>* pointee=nullptr);
   private:
   // TODO is typename required here?
-  btree<T>* _pointee;
+  btree<T>* _pTree;
   T holder;
 
 };

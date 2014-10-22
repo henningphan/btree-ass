@@ -88,6 +88,9 @@ std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
 
     for( size_t i=0; i< t->_vec.size(); ++i){
       cout << t->_vec[i].first;
+      if( t->_parent == nullptr){
+        cout << " null" <<endl;
+      }
         if( q.empty() && i+1 == t->_vec.size()){
           continue;
         }
@@ -146,6 +149,7 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
         return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
         // element should be inserted here
       }else if( elem < _vec[i].first  ){
+        cout << "elem was inserted: " << elem << endl;
         _vec.insert(_vec.begin()+i, make_pair(elem, new btree<T>(_maxNodeElems, this)));
         // if it's saturated add extra last node
         if( _vec.size() >= _maxNodeElems )
@@ -154,12 +158,14 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
         return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
       }
     }
+    cout << "elem was inserted at back: " << elem << endl;
     // found no place to insert thus it must be at the end
     _vec.push_back(make_pair( elem, new btree<T>( _maxNodeElems, this)));
     // if it's saturated add extra last node
     if( _vec.size() >= _maxNodeElems ){
-      _last = new btree(_maxNodeElems);
+      _last = new btree(_maxNodeElems,this);
     }
+
     return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,_vec.size()-1), true);
   }
 }
