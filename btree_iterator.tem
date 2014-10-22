@@ -12,6 +12,7 @@ template <typename T>
 btree_iterator<T>& btree_iterator<T>::operator++() {
   cout << "iterator ++" <<endl;
   // step right and go as deep as possible
+//    cout << "print all values of parent: "<<*_pTree->_parent<<endl;
   if(_index+1 < _pTree->_vec.size()){
     cout << "\tfirst" <<endl;
     ++_index;
@@ -32,16 +33,37 @@ btree_iterator<T>& btree_iterator<T>::operator++() {
     cout << "\tthird"<<endl;
 
     while(_pTree != nullptr){
+    cout << "index " << _index+1 << " " << _pTree->_vec.size()<<endl;
       btree<T>* prev = _pTree;
       _pTree = _pTree->_parent;
+      // if past root node
       if( _pTree == nullptr){
+        _pTree = prev;
         cout << "nullptr" <<endl;
         return *this;
       }
+      // if parents parent is solution?
       if( _pTree->_last == prev){
-    cout << "\t\tlast==prev"<<endl;
+        cout << "\t\tlast==prev"<<endl;
+        cout << "\tvalue=" << *_pTree<<endl;
+        bool x = _pTree->_parent == nullptr;
+        cout << "\t" <<"is parent null? =  " << x <<endl;
         continue;
-      } else if( _pTree->_last == nullptr && _pTree->_vec.back().second == prev){
+      } 
+      cout << " before while" <<endl;
+      /*
+      cout <<"output _pTree "<< *_pTree<<endl;
+      cout << "_vec.size() = " << _pTree->_vec.size()<<endl;
+      bool x = _pTree->_last == nullptr;
+      cout << "is _last null? =" << x <<endl;
+      auto t = _pTree->_vec.back().first;
+      cout << "output error: " <<t <<endl;
+      */
+      cout << " after while" <<endl;
+
+
+      
+      if( _pTree->_last == nullptr && _pTree->_vec.back().second == prev){
     cout << "\t\tback==prev"<<endl;
         continue;
       }
@@ -55,8 +77,12 @@ btree_iterator<T>& btree_iterator<T>::operator++() {
       if(goLeft()){
         cout << "going backwards goLeft()"<<endl;
       }
+
+      cout << "\treturn 2"<<endl;
+      return *this;
     }
   }
+  cout << "\treturn"<<endl;
   return *this;
 }
 template <typename T>
@@ -118,11 +144,16 @@ bool btree_iterator<T>::goLeft(){
   cout << "goLeft - ";
   bool result = false;
   while( !_pTree->_vec[_index].second->isEmpty() ){
+  cout << "goLeft - WARNING";
     _pTree = _pTree->_vec[_index].second;
     _index = 0;
     result = true;
   }
-  cout << "goLeft"<<endl;
+  if( result){
+    cout << "true"<<endl;
+  }else{
+    cout << "false"<<endl;
+  }
   return result;
 }
 /**

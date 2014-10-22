@@ -182,6 +182,7 @@ class btree {
     */
   ~btree();
   
+  bool integrity(btree<T>* father);
 private:
   btree(size_t maxNodeElems, btree<T>* parent);
   bool isFull(){ return _vec.size() >=_maxNodeElems;}
