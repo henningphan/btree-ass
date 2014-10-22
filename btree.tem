@@ -102,17 +102,20 @@ template<typename T>
 btree_iterator<T> btree<T>::find( const T& elem){
   for(size_t i=0; i< this->_vec.size(); ++i){
     if( elem < this->_vec[i].first && this->_vec[i].second->isEmpty()){
+      cout << "cant find elem" << endl;
       return btree_iterator<T>(nullptr,0);
     } else if( elem < this->_vec[i].first ){
       return this->_vec[i].second->find(elem);
     }else if( elem == this->_vec[i].first ){
+      cout << "find suceeded" << endl;
       return btree_iterator<T>(this,i);
     }
   }
   if( this->_last == nullptr ){
+      cout << "cant find elem" << endl;
     return btree_iterator<T>(nullptr,0);
   }
-  return this->find(elem);
+  return this->_last->find(elem);
 }
 // TODO can you abstract the other find?
 template<typename T>
