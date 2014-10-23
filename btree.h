@@ -113,7 +113,8 @@ class btree {
    * -- crbegin() 
    * -- crend() 
    */
-   iterator begin(){ return iterator(nullptr);}
+   iterator begin(){ return iterator(this);}
+   // TODO return proper end iterator
    iterator end(){ return iterator(nullptr);}
    const_iterator end() const{ return const_iterator(nullptr);}
   
