@@ -16,37 +16,27 @@ T* btree_iterator<T>::operator->() const{
 }
 template <typename T>
 btree_iterator<T>& btree_iterator<T>::operator++() {
-  cout << "iterator ++" <<endl;
   // step right and go as deep as possible
 //    cout << "print all values of parent: "<<*_pTree->_parent<<endl;
   ++_index;
   if(_index < _pTree->_vec.size()){
-    cout << "\tfirst" <<endl;
-    if( goLeft()){
-      cout << "\tgoLeft()"<<endl;
-    }
+    goLeft();
   // if vector has ended we should go to last
   }else if( _pTree->_last !=nullptr && !_pTree->_last->isEmpty()){
-    cout << "\tsecond" <<endl;
     _pTree = _pTree->_last;
     _index = 0;
-    if( goLeft()){
-      cout << "\t_last goLeft()"<<endl;
-    }
+    goLeft();
 
   // Last resort go to parent
   }else{
-    cout << "\tthird"<<endl;
 
     btree<T>* atTree = _pTree;
     while(_pTree != nullptr){
-      cout << "index " << _index << " " << _pTree->_vec.size()<<endl;
       btree<T>* prev = _pTree;
       _pTree = _pTree->_parent;
       // if _pTree is nullptr then atTree was truly the last and largest btree
       if( _pTree == nullptr){
         _pTree = atTree;
-        cout << "nullptr" <<endl;
         return *this;
       }
       // if the _parent was a _last node aswell we should keep traversing the tree
@@ -60,18 +50,15 @@ btree_iterator<T>& btree_iterator<T>::operator++() {
       // find which parent we came from and increment to next
       for( size_t i=0; i< _pTree->_vec.size(); ++i){
         if( _pTree->_vec[i].second == prev ){
-          // TODO check for a bug, feels like _index >= _maxNodeElems
-          // how does it know it should go to _last && goLeft()?
-          cout << "henning caught it " << i+1 << " " << _pTree->_vec.size() <<endl;
           _index = i+1;
           if( _index == _pTree->_vec.size() && _pTree->_last != nullptr){
             _pTree = _pTree->_last;
             _index = 0;
           }
+          goLeft();
           break;
         }
       }
-      goLeft();
       return *this;
     }
   }
