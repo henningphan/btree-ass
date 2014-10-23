@@ -115,7 +115,7 @@ class btree {
    */
    iterator begin(){ return iterator(this);}
    // TODO return proper end iterator
-   iterator end(){ return iterator(nullptr);}
+   iterator end(){ return iterator(this,_maxNodeElems);}
    const_iterator end() const{ return const_iterator(nullptr);}
   
   /**

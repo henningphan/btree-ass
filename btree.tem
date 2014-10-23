@@ -96,9 +96,11 @@ std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
 
     for( size_t i=0; i< t->_vec.size(); ++i){
       cout << t->_vec[i].first;
+      /*
       if( t->_parent == nullptr){
         cout << " _parent is null" <<endl;
       }
+      */
         if( q.empty() && i+1 == t->_vec.size()){
           continue;
         }
