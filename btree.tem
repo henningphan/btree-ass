@@ -16,8 +16,7 @@ _last(nullptr) { }
 // Only pass the root btree as argument
 // only guarantee to work correctly if original is correct
 template<typename T>
-btree<T>::btree(const btree<T>& original){
-  this->_maxNodeElems = original._maxNodeElems;
+btree<T>::btree(const btree<T>& original): _maxNodeElems(original._maxNodeElems),_parent(nullptr),_last(nullptr){
   deque<const btree<T> *> q;
   q.push_back(&original);
   while( !q.empty() ){
@@ -41,9 +40,9 @@ btree<T>::btree(const btree<T>& original){
 // move ctor
 // Only pass the root btree as argument
 template<typename T>
-btree<T>::btree( btree<T>&& original){
+btree<T>::btree( btree<T>&& original): _parent(nullptr),_vec(move(original._vec)){
   this->_maxNodeElems = original._maxNodeElems;
-  this->_vec = move(original._vec);
+//  this->_vec = move(original._vec);
   this->_last = original._last;
 
   original._last = nullptr;
@@ -62,9 +61,6 @@ btree<T>& btree<T>::operator=(btree<T>&& rhs){
   swap(*this,rhs);
   btree<T> temp(*this._maxNodeElems);
   swap(temp,rhs);
-  for(auto & p: this->_vec){
-    p.second->_parent=this;
-  }
   if(this->_last != nullptr){
     this->_last->_parent=this;
   }
@@ -203,7 +199,8 @@ bool btree<T>::integrity(btree<T>* father){
   cout << "integrity check "<<endl;
   bool res = (this->_parent == father);
   if(!res){
-    cout <<*this->_parent<<endl;
+      cout<< "father: " <<father<<endl;
+      cout<< "parent: " <<_parent<<endl;
     cout << "You are not my father"<<endl;
     return false;
   }
