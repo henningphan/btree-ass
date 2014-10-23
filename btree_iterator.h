@@ -26,6 +26,7 @@ class btree_iterator{
 
   private:
   bool goLeft();
+  bool goRight();
   btree<T>* _pTree;
   btree<T>* _root;
   size_t _index;

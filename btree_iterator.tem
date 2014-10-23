@@ -2,7 +2,7 @@
  
 template <typename T>
 T& btree_iterator<T>::operator*() const{
-  if( _index > _pTree->_maxNodeElems){
+  if( _index >= _pTree->_vec.size()){
     return _pTree->_vec.back().first;
   }
   return _pTree->_vec[_index].first;
@@ -19,9 +19,9 @@ btree_iterator<T>& btree_iterator<T>::operator++() {
   cout << "iterator ++" <<endl;
   // step right and go as deep as possible
 //    cout << "print all values of parent: "<<*_pTree->_parent<<endl;
-  if(_index+1 < _pTree->_vec.size()){
+  ++_index;
+  if(_index < _pTree->_vec.size()){
     cout << "\tfirst" <<endl;
-    ++_index;
     if( goLeft()){
       cout << "\tgoLeft()"<<endl;
     }
@@ -38,13 +38,14 @@ btree_iterator<T>& btree_iterator<T>::operator++() {
   }else{
     cout << "\tthird"<<endl;
 
+      btree<T>* atTree = _pTree;
     while(_pTree != nullptr){
-    cout << "index " << _index+1 << " " << _pTree->_vec.size()<<endl;
+    cout << "index " << _index << " " << _pTree->_vec.size()<<endl;
       btree<T>* prev = _pTree;
       _pTree = _pTree->_parent;
-      // if past root node
+      // if the last value is truly the last, dont leave it
       if( _pTree == nullptr){
-        _pTree = prev;
+        _pTree = atTree;
         cout << "nullptr" <<endl;
         return *this;
       }
@@ -120,6 +121,14 @@ btree_iterator<T>::btree_iterator( btree<T>* pTree, size_t index): _pTree(pTree)
     temp = temp->_parent;
   }
   _root = temp;
+  cout << "btree_iterator ctor printing root: " <<*_root << endl;
+  // it wants end()
+  if( _index >= _root->_maxNodeElems){
+    cout << "it wants end()"<<endl;
+    _pTree = _root;
+    goRight();
+    _index = _pTree->_vec.size();
+  }
 }
 
 /**
@@ -180,6 +189,49 @@ bool btree_iterator<T>::goLeft(){
     cout << "false"<<endl;
   }
   return result;
+}
+template<typename T>
+bool btree_iterator<T>::goRight(){
+  cout << "goRight - "<<endl;
+  // Guarding
+  if( _pTree -> _vec.size() <= _index && _pTree->_last == nullptr ){
+    cout << " first reached end"<<endl;
+    return false;
+  }
+  if( _pTree -> _vec.size() <= _index && _pTree->_last != nullptr && _pTree->_last->isEmpty()){
+    cout << " change index" <<endl;
+    _index = _pTree->_vec.size()-1;
+  }
+  // if _index is to high then _last is the correct way
+  if( _pTree -> _vec.size() <= _index && _pTree->_last != nullptr && !_pTree->_last->isEmpty()){
+    cout << " second recursive"<<endl;
+    _pTree = _pTree->_last;
+    // next node is also the _last node
+    if( _pTree->_last != nullptr && !_pTree->_last->isEmpty()){
+      _index = _pTree->_maxNodeElems;
+    }else{
+      _index = _pTree ->_vec.size()-1;
+    }
+    goRight();
+    return true;
+  }
+  cout << " halfway" << endl;
+  cout << " index=(" <<_index << ") , vec.size=(" << _pTree->_vec.size()<<")"<<endl;
+
+  if( !_pTree->_vec[_index].second->isEmpty()){
+    cout << " third iterate" <<endl;
+    _pTree = _pTree->_vec[_index].second;
+    // next node is also the _last node
+    if( _pTree->_last != nullptr && !_pTree->_last->isEmpty()){
+      _index = _pTree->_maxNodeElems;
+    }else{
+      _index = _pTree ->_vec.size()-1;
+    }
+    goRight();
+    return true;
+    
+  }
+  return false;
 }
 /**
 template<typename T>
