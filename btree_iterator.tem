@@ -2,10 +2,16 @@
  
 template <typename T>
 T& btree_iterator<T>::operator*() const{
+  if( _index > _pTree->_maxNodeElems){
+    return _pTree->_vec.back().first;
+  }
   return _pTree->_vec[_index].first;
 }
 template <typename T>
 T* btree_iterator<T>::operator->() const{
+  if( _index > _pTree->_maxNodeElems){
+    return &_pTree->_vec.back().first;
+  }
   return &_pTree->_vec[_index].first;
 }
 template <typename T>
