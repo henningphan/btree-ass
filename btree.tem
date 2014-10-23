@@ -40,10 +40,16 @@ btree<T>::btree(const btree<T>& original): _maxNodeElems(original._maxNodeElems)
 // move ctor
 // Only pass the root btree as argument
 template<typename T>
-btree<T>::btree( btree<T>&& original): _parent(nullptr),_vec(move(original._vec)){
-  this->_maxNodeElems = original._maxNodeElems;
+btree<T>::btree( btree<T>&& original): _maxNodeElems(original._maxNodeElems), _last(original._last), _parent(nullptr),_vec(move(original._vec)){
 //  this->_vec = move(original._vec);
-  this->_last = original._last;
+//  this->_last = original._last;
+  for(auto& p: _vec){
+    p.second->_parent = this;
+
+  }
+  if(_last !=nullptr){
+    _last->_parent = this;
+  }
 
   original._last = nullptr;
 
