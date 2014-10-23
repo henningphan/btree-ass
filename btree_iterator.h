@@ -17,6 +17,7 @@ class btree_iterator{
   reference operator*() const;
   pointer operator->() const;
   btree_iterator& operator++();
+  btree_iterator& operator--();
   bool operator==(const btree_iterator& other);
   // begin();
   btree_iterator( btree<T>* root);
