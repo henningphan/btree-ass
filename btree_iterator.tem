@@ -49,12 +49,7 @@ btree_iterator<T>& btree_iterator<T>::operator++() {
       // find which parent we came from and increment to next
       for( size_t i=0; i< _pTree->_vec.size(); ++i){
         if( _pTree->_vec[i].second == prev ){
-          _index = i+1;
-          if( _index == _pTree->_vec.size() && _pTree->_last != nullptr){
-            _pTree = _pTree->_last;
-            _index = 0;
-          }
-          goLeft();
+          _index = i;
           break;
         }
       }
