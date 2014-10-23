@@ -38,58 +38,43 @@ btree_iterator<T>& btree_iterator<T>::operator++() {
   }else{
     cout << "\tthird"<<endl;
 
-      btree<T>* atTree = _pTree;
+    btree<T>* atTree = _pTree;
     while(_pTree != nullptr){
-    cout << "index " << _index << " " << _pTree->_vec.size()<<endl;
+      cout << "index " << _index << " " << _pTree->_vec.size()<<endl;
       btree<T>* prev = _pTree;
       _pTree = _pTree->_parent;
-      // if the last value is truly the last, dont leave it
+      // if _pTree is nullptr then atTree was truly the last and largest btree
       if( _pTree == nullptr){
         _pTree = atTree;
         cout << "nullptr" <<endl;
         return *this;
       }
-      // if parents parent is solution?
+      // if the _parent was a _last node aswell we should keep traversing the tree
       if( _pTree->_last == prev){
-        cout << "\t\tlast==prev"<<endl;
-        cout << "\tvalue=" << *_pTree<<endl;
-        bool x = _pTree->_parent == nullptr;
-        cout << "\t" <<"is parent null? =  " << x <<endl;
         continue;
       } 
-      cout << " before while" <<endl;
-      /*
-      cout <<"output _pTree "<< *_pTree<<endl;
-      cout << "_vec.size() = " << _pTree->_vec.size()<<endl;
-      bool x = _pTree->_last == nullptr;
-      cout << "is _last null? =" << x <<endl;
-      auto t = _pTree->_vec.back().first;
-      cout << "output error: " <<t <<endl;
-      */
-      cout << " after while" <<endl;
-
-
-      
+      // if we came from the last node we should keep traversing the tree
       if( _pTree->_last == nullptr && _pTree->_vec.back().second == prev){
-    cout << "\t\tback==prev"<<endl;
         continue;
       }
-    cout << "\t\tfor loop"<<endl;
+      // find which parent we came from and increment to next
       for( size_t i=0; i< _pTree->_vec.size(); ++i){
         if( _pTree->_vec[i].second == prev ){
+          // TODO check for a bug, feels like _index >= _maxNodeElems
+          // how does it know it should go to _last && goLeft()?
+          cout << "henning caught it " << i+1 << " " << _pTree->_vec.size() <<endl;
           _index = i+1;
+          if( _index == _pTree->_vec.size() && _pTree->_last != nullptr){
+            _pTree = _pTree->_last;
+            _index = 0;
+          }
           break;
         }
       }
-      if(goLeft()){
-        cout << "going backwards goLeft()"<<endl;
-      }
-
-      cout << "\treturn 2"<<endl;
+      goLeft();
       return *this;
     }
   }
-  cout << "\treturn"<<endl;
   return *this;
 }
 template <typename T>
@@ -172,6 +157,7 @@ template<typename T>
 bool btree_iterator<T>::goLeft(){
   cout << "goLeft - ";
   bool result = false;
+  // TODO remove this code, should not be possible
   if( _pTree->_vec.empty() ){
     cout << "goLeft - Warning no elements";
     _pTree = nullptr;
@@ -182,11 +168,6 @@ bool btree_iterator<T>::goLeft(){
     _pTree = _pTree->_vec[_index].second;
     _index = 0;
     result = true;
-  }
-  if( result){
-    cout << "true"<<endl;
-  }else{
-    cout << "false"<<endl;
   }
   return result;
 }
