@@ -96,11 +96,6 @@ std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
 
     for( size_t i=0; i< t->_vec.size(); ++i){
       cout << t->_vec[i].first;
-      /*
-      if( t->_parent == nullptr){
-        cout << " _parent is null" <<endl;
-      }
-      */
         if( q.empty() && i+1 == t->_vec.size()){
           continue;
         }
@@ -115,19 +110,15 @@ template<typename T>
 btree_iterator<T> btree<T>::find( const T& elem){
   for(size_t i=0; i< this->_vec.size(); ++i){
     if( elem < this->_vec[i].first && this->_vec[i].second->isEmpty()){
-      cout << "cant find elem" << endl;
-      // TODO return proper end() ptr
-      return btree_iterator<T>(nullptr,0);
+      return end();
     } else if( elem < this->_vec[i].first ){
       return this->_vec[i].second->find(elem);
     }else if( elem == this->_vec[i].first ){
-      cout << "find suceeded" << endl;
       return btree_iterator<T>(this,i);
     }
   }
   if( this->_last == nullptr ){
-      cout << "cant find elem" << endl;
-    return btree_iterator<T>(nullptr,0);
+    return end();
   }
   return this->_last->find(elem);
 }
@@ -142,10 +133,9 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
     for(size_t i = 0; i<_maxNodeElems; ++i){
       // element already exists
       if( elem == _vec[i].first){
-        // TODO return proper iterator
         return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
       }
-      // element is in another btree
+      // element should be inserted in another btree
       if( elem < _vec[i].first  ){
         return _vec[i].second->insert(elem);
       }
@@ -156,31 +146,21 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
     for( size_t i=0; i< _vec.size(); ++i ){
       // element already exists
       if( _vec[i].first == elem ){
-        // TODO return proper iterator
         return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
         // element should be inserted here
       }else if( elem < _vec[i].first  ){
-        cout << "elem was inserted: " << elem << endl;
         _vec.insert(_vec.begin()+i, make_pair(elem, new btree<T>(_maxNodeElems, this)));
         // if it's saturated add extra last node
         if( _vec.size() >= _maxNodeElems )
           _last = new btree(_maxNodeElems, this);
-        // TODO return proper iterator
         return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
       }
     }
-    cout << "elem was inserted at back: " << elem << endl;
     // found no place to insert thus it must be at the end
     _vec.push_back(make_pair( elem, new btree<T>( _maxNodeElems, this)));
     // if it's saturated add extra last node
     if( _vec.size() >= _maxNodeElems ){
-      cout << "  elem got _last node: " << elem <<endl;
       _last = new btree(_maxNodeElems,this);
-      if(_last->_parent ==this ) {
-        cout << "  Added parent correctly"<<endl;
-      }else{
-        cout << "  Fail parent correctly"<<endl;
-      }
     }
 
     return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,_vec.size()-1), true);
