@@ -97,11 +97,8 @@ bool btree_iterator<T>::operator==(const btree_iterator<T>& other){
   if( this->_root != other._root){
     return false;
   }
-  // is index exceeding _maxNodeElems then it's equal to end();
-  if( this->_index >= this->_maxNodeElems && other._index >= other._maxNodeElems){
-    return true;
   // is it pointing to the same element?
-  }else if( this->_pTree == other._pTree && this->_index == other._index){
+  if( this->_pTree == other._pTree && this->_index == other._index){
     return true;
   }
   // All other cases they cant be equal
@@ -118,6 +115,7 @@ btree_iterator<T>::btree_iterator( btree<T>* root): _root(root), _pTree(root),_i
 template <typename T>
 btree_iterator<T>::btree_iterator( btree<T>* pTree, size_t index): _pTree(pTree), _index(index){
   btree<T> *temp = _pTree;
+  // find and set the root node
   while(temp->_parent != nullptr){
     temp = temp->_parent;
   }
