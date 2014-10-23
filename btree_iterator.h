@@ -18,12 +18,16 @@ class btree_iterator{
   pointer operator->() const;
   btree_iterator& operator++();
   bool operator==(const btree_iterator& other);
+  // begin();
+  btree_iterator( btree<T>* root);
+  // find();
   btree_iterator( btree<T>* pTree, size_t index);
   bool operator!=(const btree_iterator& other);
 
   private:
   bool goLeft();
   btree<T>* _pTree;
+  btree<T>* _root;
   size_t _index;
 
 };
