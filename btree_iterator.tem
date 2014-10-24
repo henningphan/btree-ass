@@ -113,7 +113,7 @@ bool btree_iterator<T>::operator==(const btree_iterator<T>& other){
 }
 template <typename T>
 bool btree_iterator<T>::operator!=(const btree_iterator<T>& other){
-  return !this==(other);
+  return !this->operator==(other);
 }
 template <typename T>
 btree_iterator<T>::btree_iterator( btree<T>* root): _root(root), _pTree(root),_index(0){
@@ -140,32 +140,6 @@ btree_iterator<T>::btree_iterator( btree<T>* pTree, size_t index): _pTree(pTree)
   * const iterator
   *
   */
-
-template <typename T>
-const T& const_btree_iterator<T>::operator*() const{
-  return holder;
-}
-// TODO write const T* as typedef pointer
-template <typename T>
-const T* const_btree_iterator<T>::operator->() const{
-  return &holder;
-}
-template <typename T>
-const_btree_iterator<T>& const_btree_iterator<T>::operator++() {
-
-  return this;
-}
-template <typename T>
-bool const_btree_iterator<T>::operator==(const const_btree_iterator<T>& other){
-  return true;
-}
-template <typename T>
-bool const_btree_iterator<T>::operator!=(const const_btree_iterator<T>& other){
-  return true;
-}
-template <typename T>
-const_btree_iterator<T>::const_btree_iterator( btree<T>* pTree): _pTree(pTree){
-}
 /**
   *
   * private helper functions
@@ -229,14 +203,212 @@ bool btree_iterator<T>::goRight(){
   }
   return false;
 }
+
 /**
-template<typename T>
-bool btree_iterator<T>::isLastSmaller(const T& elem){
-  if( _pTree->_last == nullptr){
+ *
+ * const iterator
+ *
+ */
+template <typename T>
+const T& const_btree_iterator<T>::operator*() const{
+  if( _index >= _pTree->_vec.size()){
+    return _pTree->_vec.back().first;
+  }
+  return _pTree->_vec[_index].first;
+}
+template <typename T>
+const T* const_btree_iterator<T>::operator->() const{
+  if( _index > _pTree->_maxNodeElems){
+    return &_pTree->_vec.back().first;
+  }
+  return &_pTree->_vec[_index].first;
+}
+template <typename T>
+const_btree_iterator<T>& const_btree_iterator<T>::operator++() {
+  // step right and go as deep as possible
+  ++_index;
+  if(_index < _pTree->_vec.size()){
+    goLeft();
+  // if vector has ended we should go to last
+  }else if( _pTree->_last !=nullptr && !_pTree->_last->isEmpty()){
+    _pTree = _pTree->_last;
+    _index = 0;
+    goLeft();
+
+  // Last resort go to parent
+  }else{
+
+    btree<T>* atTree = _pTree;
+    while(_pTree != nullptr){
+      btree<T>* prev = _pTree;
+      _pTree = _pTree->_parent;
+      // if _pTree is nullptr then atTree was truly the last and largest btree
+      if( _pTree == nullptr){
+        _pTree = atTree;
+        return *this;
+      }
+      // if the _parent was a _last node aswell we should keep traversing the tree
+      if( _pTree->_last == prev){
+        continue;
+      } 
+      // if we came from the last node we should keep traversing the tree
+      if( _pTree->_last == nullptr && _pTree->_vec.back().second == prev){
+        continue;
+      }
+      // find which parent we came from and increment to next
+      for( size_t i=0; i< _pTree->_vec.size(); ++i){
+        if( _pTree->_vec[i].second == prev ){
+          _index = i;
+          break;
+        }
+      }
+      return *this;
+    }
+  }
+  return *this;
+}
+template <typename T>
+const_btree_iterator<T>& const_btree_iterator<T>::operator--() {
+  // _index is to large
+  if( _index >= _pTree->_vec.size()){
+    --_index;
+    return *this;
+  }
+  // If we have an inner element
+    // if we cant go deeper prev element in vec should be correct
+  if(goRight()){
+    return *this;
+  }
+  // if it's negative visit parent
+  btree<T> * atTree = _pTree;
+  while( _index == 0 ){
+    btree<T> *prev = _pTree;
+    _pTree = _pTree->_parent;
+    // This is truly the first node and going through this while ends up at root->_parent
+    if( _pTree == nullptr){
+      _pTree = atTree;
+      return *this;
+    }
+
+    // if we came from _last
+    if( _pTree->_last == prev){
+      _index = _pTree->_vec.size()-1;
+      return *this;
+    }
+    for( size_t i=0; i< _pTree->_vec.size(); ++i){
+      if( _pTree->_vec[i].second == prev ){
+        _index = i;
+        break;
+      }
+
+    }
+  }
+  --_index;
+  return *this;
+
+}
+template <typename T>
+bool const_btree_iterator<T>::operator==(const const_btree_iterator<T>& other){
+  // Same root node?
+  if( this->_root != other._root){
+    return false;
+  }
+  // is it pointing to the same element?
+  if( this->_pTree == other._pTree && this->_index == other._index){
     return true;
-  }else if( _pTree->isEmpty()){
-    return true;
-  }else if(_pTree->_vec[0].first < elem ){
+  }
+  // All other cases they cant be equal
+  return false;
+}
+template <typename T>
+bool const_btree_iterator<T>::operator!=(const const_btree_iterator<T>& other){
+  return !*this==(other);
+}
+template <typename T>
+const_btree_iterator<T>::const_btree_iterator( btree<T>* root): _root(root), _pTree(root),_index(0){
+  goLeft();
+}
+template <typename T>
+const_btree_iterator<T>::const_btree_iterator( btree<T>* pTree, size_t index): _pTree(pTree), _index(index){
+  btree<T> *temp = _pTree;
+  // find and set the root node
+  while(temp->_parent != nullptr){
+    temp = temp->_parent;
+  }
+  _root = temp;
+  // it wants end()
+  if( _index >= _root->_maxNodeElems){
+    _pTree = _root;
+    goRight();
+    _index = _pTree->_vec.size();
   }
 }
-*/
+
+/**
+  *
+  * const iterator
+  *
+  */
+/**
+  *
+  * private helper functions
+  *
+  */
+// from _pTree tries to go so deep and to the left as possible
+template<typename T>
+bool const_btree_iterator<T>::goLeft(){
+  bool result = false;
+  // you cant go deeper
+  if( _pTree->_vec.empty() ){
+    _pTree = nullptr;
+    return true;
+  }
+  while( !_pTree->_vec[_index].second->isEmpty() ){
+    _pTree = _pTree->_vec[_index].second;
+    _index = 0;
+    result = true;
+  }
+  return result;
+}
+// from the current _pTree and index goes to as deep and to the right as possible
+// if _index > vec.size() then _last will try to be called
+template<typename T>
+bool const_btree_iterator<T>::goRight(){
+  // if it's in a weird state and should go to _last but _last is nullptr
+  if( _pTree -> _vec.size() <= _index && _pTree->_last == nullptr ){
+    return false;
+  }
+  // if _index is to high then _last is the correct way
+  if( _pTree -> _vec.size() <= _index && _pTree->_last != nullptr && !_pTree->_last->isEmpty()){
+    _pTree = _pTree->_last;
+    // is next btree _last or vec.back?
+    if( _pTree->_last != nullptr && !_pTree->_last->isEmpty()){
+      _index = _pTree->_maxNodeElems;
+    }else{
+      _index = _pTree ->_vec.size()-1;
+    }
+    goRight();
+    return true;
+  }
+  // if the last btree is empty set index to the last elem in _vec 
+  if( _pTree -> _vec.size() <= _index && _pTree->_last != nullptr && _pTree->_last->isEmpty()){
+    // TODO maybe it should return false and remove last statement
+    _index = _pTree->_vec.size()-1;
+  }
+
+  // go deeper from current _index
+  // only called in the first call and never the recursive
+  if( !_pTree->_vec[_index].second->isEmpty()){
+    _pTree = _pTree->_vec[_index].second;
+    // is next btree _last or vec.back?
+    if( _pTree->_last != nullptr && !_pTree->_last->isEmpty()){
+      _index = _pTree->_maxNodeElems;
+    }else{
+      _index = _pTree ->_vec.size()-1;
+    }
+    goRight();
+    return true;
+    
+  }
+  return false;
+}

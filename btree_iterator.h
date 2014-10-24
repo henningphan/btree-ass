@@ -42,16 +42,24 @@ class const_btree_iterator{
   typedef T value_type;
   typedef const T* pointer;
   typedef const T& reference;
+
   reference operator*() const;
   pointer operator->() const;
   const_btree_iterator& operator++();
+  const_btree_iterator& operator--();
   bool operator==(const const_btree_iterator& other);
+  // begin();
+  const_btree_iterator( btree<T>* root);
+  // find();
+  const_btree_iterator( btree<T>* pTree, size_t index);
   bool operator!=(const const_btree_iterator& other);
-  const_btree_iterator( btree<T>* pointee=nullptr);
+
   private:
-  // TODO is typename required here?
+  bool goLeft();
+  bool goRight();
   btree<T>* _pTree;
-  T holder;
+  btree<T>* _root;
+  size_t _index;
 
 };
 /**

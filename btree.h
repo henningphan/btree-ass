@@ -117,6 +117,8 @@ class btree {
    // TODO return proper end iterator
    iterator end(){ return iterator(this,_maxNodeElems);}
    const_iterator end() const{ return const_iterator(nullptr);}
+   const_iterator cend() const{ return const_iterator(nullptr);}
+   const_iterator cbegin(){ return const_iterator(this);}
   
   /**
     * Returns an iterator to the matching element, or whatever 
