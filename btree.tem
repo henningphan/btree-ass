@@ -125,7 +125,19 @@ btree_iterator<T> btree<T>::find( const T& elem){
 // TODO can you abstract the other find?
 template<typename T>
 const_btree_iterator<T> btree<T>::find( const T& elem)const{
-  return const_btree_iterator<T>();
+  for(size_t i=0; i< this->_vec.size(); ++i){
+    if( elem < this->_vec[i].first && this->_vec[i].second->isEmpty()){
+      return cend();
+    } else if( elem < this->_vec[i].first ){
+      return this->_vec[i].second->find(elem);
+    }else if( elem == this->_vec[i].first ){
+      return const_btree_iterator<T>(this,i);
+    }
+  }
+  if( this->_last == nullptr ){
+    return cend();
+  }
+  return this->_last->find(elem);
 }
 template<typename T>
 std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){

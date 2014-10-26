@@ -49,9 +49,9 @@ class const_btree_iterator{
   const_btree_iterator& operator--();
   bool operator==(const const_btree_iterator& other);
   // begin();
-  const_btree_iterator( btree<T>* root);
+  const_btree_iterator( const btree<T>* root);
   // find();
-  const_btree_iterator( btree<T>* pTree, size_t index);
+  const_btree_iterator( const btree<T>* pTree, size_t index);
   bool operator!=(const const_btree_iterator& other);
 
   private:
