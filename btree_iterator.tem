@@ -1,5 +1,24 @@
 #include "btree_iterator.h"
  
+
+template <typename T>
+bool operator==(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs){
+  cout << "CALLING OPERATOR=="<<endl;
+  if( lhs._root != rhs._root){
+    cout << "first fail" <<endl;
+    return false;
+  }
+  if( lhs._pTree == rhs._pTree && lhs._index == rhs._index){
+    cout << "first true" <<endl;
+    return true;
+  }
+    cout << "second fail" <<endl;
+  return false;
+}
+template <typename T>
+bool operator!=(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs){
+  return false;
+}
 template <typename T>
 T& btree_iterator<T>::operator*() const{
   if( _index >= _pTree->_vec.size()){
@@ -98,6 +117,7 @@ btree_iterator<T>& btree_iterator<T>::operator--() {
   return *this;
 
 }
+/**
 template <typename T>
 bool btree_iterator<T>::operator==(const btree_iterator<T>& other){
   // Same root node?
@@ -115,6 +135,7 @@ template <typename T>
 bool btree_iterator<T>::operator!=(const btree_iterator<T>& other){
   return !this->operator==(other);
 }
+*/
 template <typename T>
 btree_iterator<T>::btree_iterator( btree<T>* root): _root(root), _pTree(root),_index(0){
   goLeft();
@@ -233,9 +254,9 @@ const_btree_iterator<T>& const_btree_iterator<T>::operator++() {
   // Last resort go to parent
   }else{
 
-    btree<T>* atTree = _pTree;
+    const btree<T>* atTree = _pTree;
     while(_pTree != nullptr){
-      btree<T>* prev = _pTree;
+      const btree<T>* prev = _pTree;
       _pTree = _pTree->_parent;
       // if _pTree is nullptr then atTree was truly the last and largest btree
       if( _pTree == nullptr){
