@@ -1,14 +1,17 @@
 #ifndef BTREE_ITERATOR_H
 #define BTREE_ITERATOR_H
-
 #include <iterator>
+
 using namespace std;
 
 template <typename T> class btree;
-
+template <typename T> class const_btree_iterator;
+template <class T> 
+  bool operator==(const_btree_iterator& lhs, const_btree_iterator& rhs);
 template <typename T>
 class btree_iterator{
   public:
+  friend const_btree_iterator<T>;
   typedef ptrdiff_t difference_type;
   typedef bidirectional_iterator_tag iterator_category;
   typedef T value_type;
@@ -52,6 +55,7 @@ class const_btree_iterator{
   const_btree_iterator( const btree<T>* root);
   // find();
   const_btree_iterator( const btree<T>* pTree, size_t index);
+  const_btree_iterator( const btree_iterator<T>& it );
   bool operator!=(const const_btree_iterator& other);
 
   private:
