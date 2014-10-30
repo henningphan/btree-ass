@@ -6,6 +6,9 @@
 #include <cstdlib>
 #include <iterator>
 using namespace std;
+void foo( const_btree_iterator<int> iter){
+
+}
 int main(){
   srand(0);
   btree<int> b(4);
@@ -16,6 +19,18 @@ int main(){
     nr = rand()%100;
     vec[nr] = 0;
     auto p = b.insert(nr);
+  }
+
+  auto it = b.begin();
+  const_btree_iterator<int> it2 = it;
+  foo(it);
+  if( it2 == it){
+    cout << "iterator working" <<endl;
+  }else{
+    cout << "iterator Failed" <<endl;
+  }
+
+  /*
     if(p.second){
       if(*p.first != nr){
         cout << "ERROR"<<endl;
@@ -30,8 +45,9 @@ int main(){
     }
 
   }
+  */
 
-
+/*
   btree<int> c(move(b));
   cout <<"bfs: "<< c << endl;
   cout << "increasing: ";
@@ -54,7 +70,7 @@ int main(){
 
   }
   cout << "END" << endl;
-  
+ */ 
   
   /*
   auto it1 = c.end();

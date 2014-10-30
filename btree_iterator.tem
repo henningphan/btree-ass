@@ -2,7 +2,7 @@
  
 
 template <typename T>
-bool operator==(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs){
+bool operator==(const_btree_iterator<T> lhs, const_btree_iterator<T> rhs){
   cout << "CALLING OPERATOR=="<<endl;
   if( lhs._root != rhs._root){
     cout << "first fail" <<endl;
@@ -15,9 +15,18 @@ bool operator==(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs){
     cout << "second fail" <<endl;
   return false;
 }
+//template <typename T>
+//bool operator==(const_btree_iterator<T> lhs, btree_iterator<T> rhs){
+//  return true;
+//}
+//template <typename T>
+//bool operator!=(const_btree_iterator<T> lhs, btree_iterator<T> rhs){
+//  return false;
+//}
+
 template <typename T>
 bool operator!=(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs){
-  return false;
+  return !(lhs == rhs);
 }
 template <typename T>
 T& btree_iterator<T>::operator*() const{
@@ -365,6 +374,13 @@ template <typename T>
 const_btree_iterator<T>::const_btree_iterator( const btree_iterator<T>& it ): _pTree(it._pTree),
    _root(it._root), _index(it._index){
 }
+
+/**
+template <typename T>
+const_btree_iterator<T>::const_btree_iterator( const btree_iterator<T> it ): _pTree(it._pTree),
+   _root(it._root), _index(it._index){
+}
+*/
 /**
   *
   * private helper functions
