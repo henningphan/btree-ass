@@ -13,18 +13,27 @@ template <class T>
 template <class T> 
   bool operator!=(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs);
 
-//§template <class T> 
-//  bool operator==(const_btree_iterator<T> lhs, btree_iterator<T> rhs);
-//template <class T> 
-//  bool operator!=(const_btree_iterator<T> lhs, btree_iterator<T> rhs);
-
-
 template <typename T>
 class btree_iterator{
   public:
   friend const_btree_iterator<T>;
-  friend bool operator==<T>(const_btree_iterator<T> lhs, const_btree_iterator<T> rhs);
-  friend bool operator!=<T>(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs);
+  friend bool operator==(const btree_iterator<T> lhs, const btree_iterator<T> rhs){
+  if( lhs._root != rhs._root){
+    cout << "first fail" <<endl;
+    return false;
+  }
+  if( lhs._pTree == rhs._pTree && lhs._index == rhs._index){
+    cout << "first true" <<endl;
+    return true;
+  }
+    cout << "second fail" <<endl;
+  return false;
+}
+  friend bool operator!=(const btree_iterator<T> lhs, const btree_iterator<T> rhs){
+    return !(lhs == rhs);
+  }
+//  friend bool operator==<T>(const_btree_iterator<T> lhs, const_btree_iterator<T> rhs);
+//  friend bool operator!=<T>(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs);
   typedef ptrdiff_t difference_type;
   typedef bidirectional_iterator_tag iterator_category;
   typedef T value_type;
@@ -63,9 +72,21 @@ class const_btree_iterator{
   typedef const T* pointer;
   typedef const T& reference;
 
-  friend bool operator==<T>(const_btree_iterator<T> lhs, const_btree_iterator<T> rhs);
-  friend bool operator!=<T>(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs);
-
+  friend bool operator==(const const_btree_iterator<T> lhs, const const_btree_iterator<T> rhs){
+    if( lhs._root != rhs._root){
+      cout << "first fail" <<endl;
+      return false;
+    }
+    if( lhs._pTree == rhs._pTree && lhs._index == rhs._index){
+      cout << "first true" <<endl;
+      return true;
+    }
+      cout << "second fail" <<endl;
+    return false;
+  }
+  friend bool operator!=(const const_btree_iterator<T> lhs, const const_btree_iterator<T> rhs){
+    return !(lhs == rhs);
+}
 //  friend bool operator==<T>(const_btree_iterator<T> lhs, btree_iterator<T> rhs);
 //  friend bool operator!=<T>(const_btree_iterator<T> lhs, btree_iterator<T> rhs);
 

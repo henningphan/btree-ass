@@ -3,7 +3,6 @@
 
 template <typename T>
 bool operator==(const_btree_iterator<T> lhs, const_btree_iterator<T> rhs){
-  cout << "CALLING OPERATOR=="<<endl;
   if( lhs._root != rhs._root){
     cout << "first fail" <<endl;
     return false;
