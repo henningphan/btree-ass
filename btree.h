@@ -182,7 +182,6 @@ class btree {
     *         because no matching element was there prior to the insert call.
     */
   std::pair<iterator, bool> insert(const T& elem);
-  std::pair<const_iterator, bool> insert(const T& elem)const;
 
   /**
     * Disposes of all internal resources, which includes

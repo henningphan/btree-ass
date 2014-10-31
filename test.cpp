@@ -9,6 +9,7 @@ using namespace std;
 void foo( const_btree_iterator<int> iter){
 
 }
+
 int main(){
   srand(0);
   btree<int> b(4);
@@ -27,25 +28,7 @@ int main(){
       cout << i << " find not working"<<endl;
     }
   }
-  cout << b << endl;
-
-  auto it = b.begin();
-  auto it3 = b.begin();
-  const_btree_iterator<int> it2 = it;
-  foo(it);
-  if( it2++ == it3){
-    cout << "iterator working" <<endl;
-  }else{
-    cout << "iterator Failed" <<endl;
-  }
-  auto it4 = b.crbegin();
-  auto it5 = b.crbegin();
-  if( it4++ == it5){
-    cout << "Rev iterator working" <<endl;
-  }else{
-    cout << "Rev iterator Failed" <<endl;
-  }
-
+  btree<int> c(move(b));
 
   /*
     if(p.second){

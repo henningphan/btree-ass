@@ -259,7 +259,7 @@ const_btree_iterator<T>& const_btree_iterator<T>::operator++() {
   return *this;
 }
 template <typename T>
-const_btree_iterator<T>& const_btree_iterator<T>::operator--() {
+const_btree_iterator<T>& const_btree_iterator<T>::operator--(){
   // _index is to large
   if( _index >= _pTree->_vec.size()){
     --_index;
@@ -329,6 +329,7 @@ const_btree_iterator<T>::const_btree_iterator( const btree<T>* pTree, size_t ind
     _index = _pTree->_vec.size();
   }
 }
+// Convert btree_iterator to const_btree_iterator
 template <typename T>
 const_btree_iterator<T>::const_btree_iterator( const btree_iterator<T>& it ): _pTree(it._pTree),
    _root(it._root), _index(it._index){

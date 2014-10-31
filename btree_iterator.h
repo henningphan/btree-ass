@@ -7,27 +7,28 @@ using namespace std;
 template <typename T> class btree;
 template <typename T> class const_btree_iterator;
 template <typename T> class btree_iterator;
+
 template <typename T>
 class btree_iterator{
   public:
-  friend const_btree_iterator<T>;
-  friend bool operator==(const btree_iterator<T> lhs, const btree_iterator<T> rhs){
-  if( lhs._root != rhs._root){
-    return false;
-  }
-  if( lhs._pTree == rhs._pTree && lhs._index == rhs._index){
-    return true;
-  }
-  return false;
-}
-  friend bool operator!=(const btree_iterator<T> lhs, const btree_iterator<T> rhs){
-    return !(lhs == rhs);
-  }
   typedef ptrdiff_t difference_type;
   typedef bidirectional_iterator_tag iterator_category;
   typedef T value_type;
   typedef T* pointer;
   typedef T& reference;
+  friend const_btree_iterator<T>;
+  friend bool operator==(const btree_iterator<T> lhs, const btree_iterator<T> rhs){
+    if( lhs._root != rhs._root){
+      return false;
+    }
+    if( lhs._pTree == rhs._pTree && lhs._index == rhs._index){
+      return true;
+    }
+    return false;
+  }
+  friend bool operator!=(const btree_iterator<T> lhs, const btree_iterator<T> rhs){
+    return !(lhs == rhs);
+  }
   reference operator*() const;
   pointer operator->() const;
   btree_iterator& operator++();
@@ -72,7 +73,7 @@ class const_btree_iterator{
   }
   friend bool operator!=(const const_btree_iterator<T> lhs, const const_btree_iterator<T> rhs){
     return !(lhs == rhs);
-}
+  }
 
   reference operator*() const;
   pointer operator->() const;
