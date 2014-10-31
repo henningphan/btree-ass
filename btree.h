@@ -17,6 +17,7 @@
 
 // we better include the iterator
 #include "btree_iterator.h"
+#include <iterator>
 
 // we do this to avoid compiler errors about non-template friends
 // what do we do, remember? :)
@@ -104,8 +105,6 @@ class btree {
 
   /**
    * The following can go here
-   * -- begin() 
-   * -- end() 
    * -- rbegin() 
    * -- rend() 
    * -- cbegin() 
@@ -116,9 +115,26 @@ class btree {
    iterator begin(){ return iterator(this);}
    // TODO return proper end iterator
    iterator end(){ return iterator(this,_maxNodeElems);}
-   const_iterator end() const{ return const_iterator(this);}
-   const_iterator cend() const{ return const_iterator(this);}
+   
+   reverse_iterator<btree_iterator<T>> rbegin(){
+   reverse_iterator<btree_iterator<T>> temp(begin());
+     return temp;
+   }
+   reverse_iterator<btree_iterator<T>> rend(){
+     reverse_iterator<btree_iterator<T>> temp(end());
+     return temp;
+   }
    const_iterator cbegin(){ return const_iterator(this);}
+   const_iterator end() const{ return const_iterator(this, _maxNodeElems);}
+   const_iterator cend() const{ return const_iterator(this, _maxNodeElems);}
+   reverse_iterator<const_btree_iterator<T>> crbegin(){
+   reverse_iterator<const_btree_iterator<T>> temp(cbegin());
+     return temp;
+   }
+   reverse_iterator<const_btree_iterator<T>> crend(){
+     reverse_iterator<const_btree_iterator<T>> temp(cend());
+     return temp;
+   }
   
   /**
     * Returns an iterator to the matching element, or whatever 
@@ -185,7 +201,7 @@ class btree {
     */
   ~btree();
   
-  bool integrity(btree<T>* father);
+  bool integrity(const btree<T>* father)const;
 private:
   btree(size_t maxNodeElems, btree<T>* parent);
   bool isFull(){ return _vec.size() >=_maxNodeElems;}

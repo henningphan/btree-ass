@@ -105,11 +105,11 @@ std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
 
   return os;
 }
-
 template<typename T>
 btree_iterator<T> btree<T>::find( const T& elem){
   for(size_t i=0; i< this->_vec.size(); ++i){
     if( elem < this->_vec[i].first && this->_vec[i].second->isEmpty()){
+      cout << "elem not found" <<endl;
       return end();
     } else if( elem < this->_vec[i].first ){
       return this->_vec[i].second->find(elem);
@@ -118,6 +118,7 @@ btree_iterator<T> btree<T>::find( const T& elem){
     }
   }
   if( this->_last == nullptr ){
+      cout << "elem not found" <<endl;
     return end();
   }
   return this->_last->find(elem);
@@ -196,9 +197,19 @@ btree<T>::~btree(){
 }
 // private functions
 template<typename T>
-bool btree<T>::integrity(btree<T>* father){
-  cout << "integrity check "<<endl;
+bool btree<T>::integrity(const btree<T>* father)const{
   bool res = (this->_parent == father);
+  for( unsigned int i=0; i< _vec.size();++i){
+    if( i == _vec.size()-1) break;
+    if( _vec[i] >= _vec[i+1]){
+      cout << "Integrity check failed vector order broken" <<endl;
+      cout << "iteration: " << i<<endl;
+      cout << _vec[i].first <<endl;
+      cout << _vec[1+i].first <<endl;
+      return false;
+    }
+  }
+
   if(!res){
       cout<< "father: " <<father<<endl;
       cout<< "parent: " <<_parent<<endl;

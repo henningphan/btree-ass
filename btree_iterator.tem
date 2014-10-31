@@ -112,7 +112,7 @@ btree_iterator<T> btree_iterator<T>::operator--(int){
   return temp;
 }
 template <typename T>
-btree_iterator<T>::btree_iterator( btree<T>* root): _root(root), _pTree(root),_index(0){
+btree_iterator<T>::btree_iterator( btree<T>* root): _pTree(root), _root(root), _index(0){
   goLeft();
 }
 template <typename T>
@@ -310,25 +310,6 @@ const_btree_iterator<T> const_btree_iterator<T>::operator--(int){
   --(*this);
   return temp;
 }
-/**
-template <typename T>
-bool const_btree_iterator<T>::operator==(const const_btree_iterator<T>& other){
-  // Same root node?
-  if( this->_root != other._root){
-    return false;
-  }
-  // is it pointing to the same element?
-  if( this->_pTree == other._pTree && this->_index == other._index){
-    return true;
-  }
-  // All other cases they cant be equal
-  return false;
-}
-template <typename T>
-bool const_btree_iterator<T>::operator!=(const const_btree_iterator<T>& other){
-  return !this->operator==(other);
-}
-*/
 template <typename T>
 const_btree_iterator<T>::const_btree_iterator(const btree<T>* root): _pTree(root),_root(root), _index(0){
   goLeft();
@@ -353,12 +334,6 @@ const_btree_iterator<T>::const_btree_iterator( const btree_iterator<T>& it ): _p
    _root(it._root), _index(it._index){
 }
 
-/**
-template <typename T>
-const_btree_iterator<T>::const_btree_iterator( const btree_iterator<T> it ): _pTree(it._pTree),
-   _root(it._root), _index(it._index){
-}
-*/
 /**
   *
   * private helper functions

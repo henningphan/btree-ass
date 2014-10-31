@@ -13,21 +13,16 @@ class btree_iterator{
   friend const_btree_iterator<T>;
   friend bool operator==(const btree_iterator<T> lhs, const btree_iterator<T> rhs){
   if( lhs._root != rhs._root){
-    cout << "first fail" <<endl;
     return false;
   }
   if( lhs._pTree == rhs._pTree && lhs._index == rhs._index){
-    cout << "first true" <<endl;
     return true;
   }
-    cout << "second fail" <<endl;
   return false;
 }
   friend bool operator!=(const btree_iterator<T> lhs, const btree_iterator<T> rhs){
     return !(lhs == rhs);
   }
-//  friend bool operator==<T>(const_btree_iterator<T> lhs, const_btree_iterator<T> rhs);
-//  friend bool operator!=<T>(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs);
   typedef ptrdiff_t difference_type;
   typedef bidirectional_iterator_tag iterator_category;
   typedef T value_type;
@@ -39,8 +34,6 @@ class btree_iterator{
   btree_iterator& operator--();
   btree_iterator operator++(int);
   btree_iterator operator--(int);
-//  bool operator==(const btree_iterator& other);
-//  bool operator!=(const btree_iterator& other);
   // begin();
   btree_iterator( btree<T>* root);
   // find();
@@ -70,21 +63,16 @@ class const_btree_iterator{
 
   friend bool operator==(const const_btree_iterator<T> lhs, const const_btree_iterator<T> rhs){
     if( lhs._root != rhs._root){
-      cout << "first fail" <<endl;
       return false;
     }
     if( lhs._pTree == rhs._pTree && lhs._index == rhs._index){
-      cout << "first true" <<endl;
       return true;
     }
-      cout << "second fail" <<endl;
     return false;
   }
   friend bool operator!=(const const_btree_iterator<T> lhs, const const_btree_iterator<T> rhs){
     return !(lhs == rhs);
 }
-//  friend bool operator==<T>(const_btree_iterator<T> lhs, btree_iterator<T> rhs);
-//  friend bool operator!=<T>(const_btree_iterator<T> lhs, btree_iterator<T> rhs);
 
   reference operator*() const;
   pointer operator->() const;
@@ -92,14 +80,11 @@ class const_btree_iterator{
   const_btree_iterator& operator--();
   const_btree_iterator operator++(int);
   const_btree_iterator operator--(int);
-  //bool operator==(const const_btree_iterator& other);
-  //bool operator!=(const const_btree_iterator& other);
   // begin();
   const_btree_iterator( const btree<T>* root);
   // find();
   const_btree_iterator( const btree<T>* pTree, size_t index);
   const_btree_iterator( const btree_iterator<T>& it );
-//  const_btree_iterator( const btree_iterator<T> it );
 
   private:
   bool goLeft();

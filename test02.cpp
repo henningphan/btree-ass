@@ -20,7 +20,7 @@ int main(void) {
   for(btree<int>::iterator iter = b.begin(); iter != b.end(); ++iter)
     std::cout << *iter << std::endl;
 
-  foo(b);
+//  foo(b);
   
   return 0;
 }

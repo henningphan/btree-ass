@@ -16,10 +16,18 @@ int main(){
   cout << "size" << vec.size();
   int nr;
   for( int i=0; i<100;++i){
-    nr = rand()%100;
-    vec[nr] = 0;
-    auto p = b.insert(nr);
+//    nr = rand()%100;
+ //   vec[nr] = 0;
+    auto p = b.insert(i);
   }
+  for(int i=0; i<101; ++i){
+    auto it = b.find(i); 
+    bool isEnd = b.find(i) == b.end();
+    if(isEnd){
+      cout << i << " find not working"<<endl;
+    }
+  }
+  cout << b << endl;
 
   auto it = b.begin();
   auto it3 = b.begin();
@@ -29,6 +37,13 @@ int main(){
     cout << "iterator working" <<endl;
   }else{
     cout << "iterator Failed" <<endl;
+  }
+  auto it4 = b.crbegin();
+  auto it5 = b.crbegin();
+  if( it4++ == it5){
+    cout << "Rev iterator working" <<endl;
+  }else{
+    cout << "Rev iterator Failed" <<endl;
   }
 
 

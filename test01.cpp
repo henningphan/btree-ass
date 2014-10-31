@@ -43,7 +43,7 @@ bool confirmEverythingMatches(const btree<long>&, const set<long>&);
  * The default argument uses a 'random' seed, but a specific 
  * seed can be supplied to reproduce the random sequence for testing.
  **/
-void initRandom(unsigned long seed = 0) {
+void initRandom(unsigned long seed = 1) {
   if (seed == 0) {
     srandom(time(NULL));
   } else {
@@ -70,6 +70,7 @@ void insertRandomNumbers(btree<long>& testContainer, set<long>& stableContainer,
   cout << "Let's insert up to " << size << " numbers." << endl;
   for (size_t i = 0; i < size; i++) {
     long rndNum = getRandom(kMinInteger, kMaxInteger);
+    if( rndNum == 1000025){ cout << "found 1 00 00 25" <<endl;}
     pair<btree<long>::iterator, bool> result = testContainer.insert(rndNum);
     if (result.second) stableContainer.insert(rndNum);
     if ((i + 1) % 100000 == 0) 
@@ -91,12 +92,19 @@ void insertRandomNumbers(btree<long>& testContainer, set<long>& stableContainer,
 bool confirmEverythingMatches(const btree<long>& testContainer, const set<long>& stableContainer) {
   cout << "Confirms the btree and the set " 
           "contain exactly the same values..." << endl;
+          testContainer.integrity(nullptr);
   for (long i = kMinInteger; i <= kMaxInteger; i++) {
     bool foundInTree = (testContainer.find(i) != testContainer.end());
     bool foundInSet = (stableContainer.find(i) != stableContainer.end());
     if (foundInTree != foundInSet) {
       cout << "- btree and set don't contain the same data!" << endl; 
       cout << "Mismatch at element: " << i << endl;
+      cout << "stableContainer: " << *stableContainer.find(i) <<endl;
+      cout << "element exist " << (stableContainer.find(i) != stableContainer.end())<<endl;
+      cout << *stableContainer.find(i)<<endl;
+      cout << "testContainer: " << *testContainer.find(i) <<endl;
+      cout << "element exist " << (testContainer.find(i) != testContainer.end())<<endl;
+      cout << *testContainer.find(i)<<endl;
       return false;
     }
   }
