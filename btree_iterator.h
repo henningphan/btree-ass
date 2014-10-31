@@ -7,12 +7,6 @@ using namespace std;
 template <typename T> class btree;
 template <typename T> class const_btree_iterator;
 template <typename T> class btree_iterator;
-
-template <class T> 
-  bool operator==(const_btree_iterator<T> lhs, const_btree_iterator<T> rhs);
-template <class T> 
-  bool operator!=(const_btree_iterator<T>& lhs, const_btree_iterator<T>& rhs);
-
 template <typename T>
 class btree_iterator{
   public:
@@ -43,6 +37,8 @@ class btree_iterator{
   pointer operator->() const;
   btree_iterator& operator++();
   btree_iterator& operator--();
+  btree_iterator operator++(int);
+  btree_iterator operator--(int);
 //  bool operator==(const btree_iterator& other);
 //  bool operator!=(const btree_iterator& other);
   // begin();
@@ -94,6 +90,8 @@ class const_btree_iterator{
   pointer operator->() const;
   const_btree_iterator& operator++();
   const_btree_iterator& operator--();
+  const_btree_iterator operator++(int);
+  const_btree_iterator operator--(int);
   //bool operator==(const const_btree_iterator& other);
   //bool operator!=(const const_btree_iterator& other);
   // begin();

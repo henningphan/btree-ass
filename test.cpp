@@ -25,11 +25,12 @@ int main(){
   auto it3 = b.begin();
   const_btree_iterator<int> it2 = it;
   foo(it);
-  if( it2 == it3){
+  if( it2++ == it3){
     cout << "iterator working" <<endl;
   }else{
     cout << "iterator Failed" <<endl;
   }
+
 
   /*
     if(p.second){
