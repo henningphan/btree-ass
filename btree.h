@@ -103,18 +103,10 @@ class btree {
    */
   friend std::ostream& operator<< <T> (std::ostream& os, const btree<T>& tree);
 
-  /**
-   * The following can go here
-   * -- rbegin() 
-   * -- rend() 
-   * -- cbegin() 
-   * -- cend() 
-   * -- crbegin() 
-   * -- crend() 
-   */
    iterator begin(){ return iterator(this);}
-   // TODO return proper end iterator
    iterator end(){ return iterator(this,_maxNodeElems);}
+   const_iterator begin() const{ return const_iterator(this);}
+   const_iterator end() const{ return const_iterator(this, _maxNodeElems);}
    
    reverse_iterator<btree_iterator<T>> rbegin(){
    reverse_iterator<btree_iterator<T>> temp(begin());
@@ -125,7 +117,6 @@ class btree {
      return temp;
    }
    const_iterator cbegin(){ return const_iterator(this);}
-   const_iterator end() const{ return const_iterator(this, _maxNodeElems);}
    const_iterator cend() const{ return const_iterator(this, _maxNodeElems);}
    reverse_iterator<const_btree_iterator<T>> crbegin(){
    reverse_iterator<const_btree_iterator<T>> temp(cbegin());
@@ -201,7 +192,6 @@ class btree {
     */
   ~btree();
   
-  bool integrity(const btree<T>* father)const;
 private:
   btree(size_t maxNodeElems, btree<T>* parent);
   bool isFull(){ return _vec.size() >=_maxNodeElems;}

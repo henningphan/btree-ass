@@ -40,21 +40,20 @@ btree<T>::btree(const btree<T>& original): _maxNodeElems(original._maxNodeElems)
 // move ctor
 // Only pass the root btree as argument
 template<typename T>
-btree<T>::btree( btree<T>&& original): _maxNodeElems(original._maxNodeElems), _last(original._last), _parent(nullptr),_vec(move(original._vec)){
-//  this->_vec = move(original._vec);
-//  this->_last = original._last;
+btree<T>::btree( btree<T>&& original): _maxNodeElems(original._maxNodeElems),  _parent(nullptr),_last(original._last), _vec(move(original._vec)){
   for(auto& p: _vec){
     p.second->_parent = this;
 
   }
+  // make sure original can be destroyed
   if(_last !=nullptr){
     _last->_parent = this;
   }
-
+  
   original._last = nullptr;
-
 }
 
+// copy assignment
 template<typename T>
 btree<T>& btree<T>::operator=(const btree<T>& rhs){
   btree<T> temp(rhs);
@@ -62,6 +61,7 @@ btree<T>& btree<T>::operator=(const btree<T>& rhs){
   return *this;
 }
 
+// move assignment
 template<typename T>
 btree<T>& btree<T>::operator=(btree<T>&& rhs){
   swap(*this,rhs);
@@ -75,6 +75,7 @@ btree<T>& btree<T>::operator=(btree<T>&& rhs){
 
 template<typename T>
 std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
+  // bfs implemented with a deque
   deque<const btree<T> *> q;
   q.push_back(&tree);
   while( !q.empty()  ){
@@ -107,9 +108,9 @@ std::ostream& operator<< (std::ostream& os, const btree<T>& tree){
 }
 template<typename T>
 btree_iterator<T> btree<T>::find( const T& elem){
+  // start by looking in the vector
   for(size_t i=0; i< this->_vec.size(); ++i){
     if( elem < this->_vec[i].first && this->_vec[i].second->isEmpty()){
-      cout << "elem not found" <<endl;
       return end();
     } else if( elem < this->_vec[i].first ){
       return this->_vec[i].second->find(elem);
@@ -117,13 +118,14 @@ btree_iterator<T> btree<T>::find( const T& elem){
       return btree_iterator<T>(this,i);
     }
   }
+  // looked everywhere but elem doesnt exist
   if( this->_last == nullptr ){
-      cout << "elem not found" <<endl;
     return end();
   }
+  // do a recursive call to find elem in _last
   return this->_last->find(elem);
 }
-// TODO can you abstract the other find?
+// deja vu
 template<typename T>
 const_btree_iterator<T> btree<T>::find( const T& elem)const{
   for(size_t i=0; i< this->_vec.size(); ++i){
@@ -166,7 +168,7 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
         // if it's saturated add extra last node
         if( _vec.size() >= _maxNodeElems )
           _last = new btree(_maxNodeElems, this);
-        return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), false);
+        return make_pair< btree_iterator<T>,bool>(btree_iterator<T>(this,i), true);
       }
     }
     // found no place to insert thus it must be at the end
@@ -182,7 +184,7 @@ std::pair<btree_iterator<T>, bool> btree<T>::insert(const T& elem){
 // TODO can you abstract the other insert
 template<typename T>
 std::pair<const_btree_iterator<T>, bool> btree<T>::insert(const T& elem)const{
-  return make_pair< const_btree_iterator<T>,bool>(const_btree_iterator<T>(), true);
+  return make_pair< const_btree_iterator<T>,bool>(cend(),false);
 }
 template<typename T>
 btree<T>::~btree(){
@@ -196,37 +198,6 @@ btree<T>::~btree(){
   _parent = nullptr;
 }
 // private functions
-template<typename T>
-bool btree<T>::integrity(const btree<T>* father)const{
-  bool res = (this->_parent == father);
-  for( unsigned int i=0; i< _vec.size();++i){
-    if( i == _vec.size()-1) break;
-    if( _vec[i] >= _vec[i+1]){
-      cout << "Integrity check failed vector order broken" <<endl;
-      cout << "iteration: " << i<<endl;
-      cout << _vec[i].first <<endl;
-      cout << _vec[1+i].first <<endl;
-      return false;
-    }
-  }
-
-  if(!res){
-      cout<< "father: " <<father<<endl;
-      cout<< "parent: " <<_parent<<endl;
-    cout << "You are not my father"<<endl;
-    return false;
-  }
-  for(auto p: this->_vec){
-    if(! p.second->integrity(this)){
-      cout<< "integrity error on elem " << p.first <<endl;
-      return false;
-    }
-  }
-  if( _last != nullptr ){
-    return _last->integrity(this);
-  }
-  return true;
-}
 
 template<typename T>
 void btree<T>::swap( btree<T>& lhs, btree<T>& rhs){
