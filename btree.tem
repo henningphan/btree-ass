@@ -196,8 +196,8 @@ btree<T>::~btree(){
 
 template<typename T>
 void btree<T>::swap( btree<T>& lhs, btree<T>& rhs){
-  swap(lhs._maxNodeElems , rhs._maxNodeElems);
+  std::swap(lhs._maxNodeElems , rhs._maxNodeElems);
   lhs._vec = move(rhs._vec);
-  swap(lhs._last , rhs._last);
+  std::swap(lhs._last , rhs._last);
 
 }
